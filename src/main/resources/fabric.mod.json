@@ -10,7 +10,7 @@
 	"environment": "*",
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/fabricMC/fabric-example-mod"
+		"sources": "https://github.com/PaviMoreira/entrepreneuradjust"
 	},
 	"entrypoints": {
 		"main": [

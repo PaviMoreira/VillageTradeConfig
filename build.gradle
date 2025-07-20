@@ -34,12 +34,8 @@ dependencies {
 	minecraft "com.mojang:minecraft:1.21.1"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-	// Essential for villager trades
 	modImplementation "net.fabricmc.fabric-api:fabric-api:0.116.2+1.21.1"
 
-	// Include mods you're interfacing with (optional but recommended)
-	// modImplementation "com.cobblemon:cobblemon-fabric:1.6.0+1.21.1"
 }
 
 processResources {
