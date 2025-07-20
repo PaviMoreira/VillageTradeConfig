@@ -1,0 +1,30 @@
+{
+	"schemaVersion": 1,
+	"id": "entrepreneur_adjust",
+	"version": "1.0.0",
+	"name": "Entrepreneur Adjust",
+	"description": "Overrides the Entrepreneur village's trades, NPC from Legendary Monuments.",
+	"authors": [
+		"PaviMoreira"
+	],
+	"environment": "*",
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/fabricMC/fabric-example-mod"
+	},
+	"entrypoints": {
+		"main": [
+          "com.pavi.entrepreneuradjust.ModTrades"
+		]
+	},
+	"license": "CC0-1.0",
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": ">=0.116.2"
+	},
+	"mixins": [
+		"entrepreneur-adjust.mixins.json"
+	]
+}

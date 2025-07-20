@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "pavi.ctc.mixin.client",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+      "com.pavi.entrepreneuradjust.mixin.client.ExampleClientMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
