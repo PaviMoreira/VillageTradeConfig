@@ -1,4 +1,4 @@
-package com.pavi.entrepreneuradjust;
+package com.pavi.villagertradeconfig;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -8,50 +8,49 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradedItem;
-import net.minecraft.village.VillagerProfession;
 
 public class ModTrades implements ModInitializer {
     @Override
     public void onInitialize() {
-        System.out.println("==== Entrepreneur Adjust Loaded ====");
+        System.out.println("==== Villager Trade Config Loaded ====");
         ServerLifecycleEvents.SERVER_STARTING.register(server -> {
             registerTrades();
         });
     }
 
     public static void registerTrades() {
-        VillagerProfession entrepreneur = Registries.VILLAGER_PROFESSION.get(
-                Identifier.of("legendarymonuments", "entrepreneur")
-        );
-
-        if (entrepreneur == null) {
-            System.out.println("ERROR: Could not find entrepreneur profession!");
-            return;
-        }
-
         ModConfig config = ModConfig.getInstance();
 
         for (ModConfig.TradeConfig tradeConfig : config.trades) {
             try {
+                // Resolve profession
+                Identifier professionId = Identifier.of(tradeConfig.villager_mod, tradeConfig.villager_id);
+
+                var profession = Registries.VILLAGER_PROFESSION.getOrEmpty(professionId).orElse(null);
+                if (profession == null) {
+                    System.err.println("Skipping trade - unknown profession: " + professionId);
+                    continue;
+                }
+
                 ItemStack primaryInput = new ItemStack(
-                        Registries.ITEM.get(Identifier.tryParse(tradeConfig.input_item)),
+                        Registries.ITEM.get(Identifier.of(tradeConfig.input_item)),
                         tradeConfig.input_count
                 );
 
                 ItemStack secondaryInput = tradeConfig.hasSecondaryItem() ?
                         new ItemStack(
-                                Registries.ITEM.get(Identifier.tryParse(tradeConfig.secondary_item)),
+                                Registries.ITEM.get(Identifier.of(tradeConfig.secondary_item)),
                                 tradeConfig.secondary_count
                         ) : null;
 
                 ItemStack output = new ItemStack(
-                        Registries.ITEM.get(Identifier.tryParse(tradeConfig.output_item)),
+                        Registries.ITEM.get(Identifier.of(tradeConfig.output_item)),
                         tradeConfig.output_count
                 );
 
                 if (primaryInput.isEmpty() || output.isEmpty()) {
-                    System.err.println("Skipping trade - could not find items: " +
-                            tradeConfig.input_item + " -> " + tradeConfig.output_item);
+                    System.err.println("Skipping trade - invalid items: " +
+                            tradeConfig.input_item + " or " + tradeConfig.output_item);
                     continue;
                 }
 
@@ -60,11 +59,11 @@ public class ModTrades implements ModInitializer {
                 final int finalExp = Math.max(0, tradeConfig.experience);
                 final float finalMult = Math.max(0, tradeConfig.multiplier);
 
-                TradeOfferHelper.registerVillagerOffers(entrepreneur, finalLevel, factories -> {
+                TradeOfferHelper.registerVillagerOffers(profession, finalLevel, factories -> {
                     factories.add((entity, random) -> new TradeOffer(
                             new TradedItem(primaryInput.getItem(), primaryInput.getCount()),
-                            secondaryInput != null ?
-                                    java.util.Optional.of(new TradedItem(secondaryInput.getItem(), secondaryInput.getCount())) : null,
+                            secondaryInput != null ? java.util.Optional.of(
+                                    new TradedItem(secondaryInput.getItem(), secondaryInput.getCount())) : null,
                             output,
                             finalMaxUses,
                             finalExp,
@@ -72,10 +71,9 @@ public class ModTrades implements ModInitializer {
                     ));
                 });
 
-                System.out.println("Registered trade: " +
+                System.out.println("Registered trade for profession '" + professionId + "': " +
                         tradeConfig.input_item + " x" + tradeConfig.input_count +
-                        (tradeConfig.hasSecondaryItem() ?
-                                " + " + tradeConfig.secondary_item + " x" + tradeConfig.secondary_count : "") +
+                        (tradeConfig.hasSecondaryItem() ? " + " + tradeConfig.secondary_item + " x" + tradeConfig.secondary_count : "") +
                         " -> " + tradeConfig.output_item + " x" + tradeConfig.output_count +
                         " (Level " + finalLevel + ")");
 
@@ -85,6 +83,6 @@ public class ModTrades implements ModInitializer {
             }
         }
 
-        System.out.println("[Entrepreneur Adjust] Successfully registered " + config.trades.size() + " trades!");
+        System.out.println("[Villager Trade Config] Finished registering " + config.trades.size() + " trades.");
     }
 }

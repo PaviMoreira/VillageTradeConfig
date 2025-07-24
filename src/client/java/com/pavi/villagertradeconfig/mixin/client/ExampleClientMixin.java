@@ -1,4 +1,4 @@
-package com.pavi.entrepreneuradjust.mixin.client;
+package com.pavi.villagertradeconfig.mixin.client;
 
 import net.minecraft.client.MinecraftClient;
 import org.spongepowered.asm.mixin.Mixin;

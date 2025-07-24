@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.pavi.entrepreneuradjust.mixin",
+  "package": "com.pavi.villagertradeconfig.mixin",
   "compatibilityLevel": "JAVA_17",
   "injectors": {
     "defaultRequire": 1

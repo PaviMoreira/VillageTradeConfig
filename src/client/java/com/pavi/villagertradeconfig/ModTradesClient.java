@@ -1,4 +1,4 @@
-package com.pavi.entrepreneuradjust;
+package com.pavi.villagertradeconfig;
 
 import net.fabricmc.api.ClientModInitializer;
 
